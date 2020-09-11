@@ -17,7 +17,6 @@ class Search:
             if node.is_finished():
                 return self.get_solve_sequence(node)
 
-            lists.push_closed(node)
             node.expand()
             for child in node.children:
                 lists.push_open(child)

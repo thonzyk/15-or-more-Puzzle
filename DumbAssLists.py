@@ -6,6 +6,19 @@ class DumbAssLists:
         self.OPEN = []
         self.CLOSED = []
 
+    def __str__(self):
+        result = "OPEN:\n"
+
+        for item in self.OPEN:
+            result = result + item.to_string()
+
+        result = result + "CLOSED:\n"
+
+        for item in self.CLOSED:
+            result = result + item.to_string() + "\n\n"
+
+        return result
+
     def poll(self) -> State:
         favorite: State = None
 
@@ -14,6 +27,8 @@ class DumbAssLists:
                 favorite = state
 
         self.OPEN = [list_state for list_state in self.OPEN if not favorite.equals(list_state, True)]
+
+        self.push_closed(favorite)
         return favorite
 
     def insert(self, state: State):
@@ -33,7 +48,8 @@ class DumbAssLists:
         for list_state in self.OPEN:
             if state.equals(list_state, False):
                 if state.get_complete_cost() < list_state.get_complete_cost():
-                    self.remove_subtree(list_state, self.OPEN)
+                    self.remove_subtree(list_state)
+                    self.clear_lists()
                     self.OPEN.append(state)
                 else:
                     state = None
@@ -42,7 +58,8 @@ class DumbAssLists:
         for list_state in self.CLOSED:
             if state.equals(list_state, False):
                 if state.get_complete_cost() < list_state.get_complete_cost():
-                    self.remove_subtree(list_state, self.CLOSED)
+                    self.remove_subtree(list_state)
+                    self.clear_lists()
                     self.OPEN.append(state)
                 else:
                     state = None
@@ -50,13 +67,17 @@ class DumbAssLists:
 
         self.OPEN.append(state)
 
-    def remove_subtree(self, root: State, target_list):
+    def remove_subtree(self, root: State):
         """
         Removes the root and its subtree by recursion.
         """
-        self.remove(root, target_list)
+        self.remove(root)
         for child in root.children:
-            self.remove_subtree(child, target_list)
+            self.remove_subtree(child)
 
-    def remove(self, state: State, target_list):
-        target_list = [list_state for list_state in target_list if not state.equals(list_state, True)]
+    def remove(self, state: State):
+        state.is_alive = False
+
+    def clear_lists(self):
+        self.OPEN = [state for state in self.OPEN if state.is_alive]
+        self.CLOSED = [state for state in self.CLOSED if state.is_alive]

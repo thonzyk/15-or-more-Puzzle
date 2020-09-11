@@ -7,6 +7,13 @@ class State:
         self.board = board
         self.parent = None
         self.children = []
+        self.is_alive = True
+
+    def __str__(self):
+        return self.board.to_string() + " cost: " + str(self.cost) + " heuristic: " + str(self.heuristic)
+
+    def to_string(self):
+        return self.board.to_string() + " cost: " + str(self.cost) + " heuristic: " + str(self.heuristic)
 
     def expand(self):
         # MOVE UP
@@ -39,6 +46,7 @@ class State:
         child.cost = self.cost + 1  # TODO: maybe move "+1" somewhere else
         child.parent = self
         child.children = []
+        child.is_alive = True
         return child
 
     def is_finished(self) -> bool:

@@ -8,7 +8,8 @@ if __name__ == '__main__':
     with open("config.properties", "rb") as f:
         p.load(f, "utf-8")
 
-    root = random_root((2, 3))
+    # root = explicit_root()
+    root = random_root((3, 3))
     search = Search()
     solution = search.findSolution(root)
 
