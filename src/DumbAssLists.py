@@ -37,7 +37,7 @@ class DumbAssLists:
     def push_closed(self, state: State):
         self.CLOSED.append(state)
 
-    def push_open(self, state: State):
+    def push(self, state: State):
         """
         If similar state doesn't exist, appends to the list
         If similar, but with same or lower cost state exists, discard the push-state
@@ -81,3 +81,6 @@ class DumbAssLists:
     def clear_lists(self):
         self.OPEN = [state for state in self.OPEN if state.is_alive]
         self.CLOSED = [state for state in self.CLOSED if state.is_alive]
+
+    def get_open_size(self):
+        return len(self.OPEN)

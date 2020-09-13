@@ -34,3 +34,12 @@ def explicit_root_2():
     root = State(board)
     return root
 
+
+def explicit_root_3():
+    board_map = np.array([1, 3, 0, 8, 4, 6, 5, 2, 7])
+    board_map = board_map.reshape((3, 3))
+    board = Board(board_map, 0, 0)
+    board.find_empty_tile()
+    root = State(board)
+    return root
+

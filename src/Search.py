@@ -1,22 +1,25 @@
-from src.Generator import random_root
 from src.DumbAssLists import DumbAssLists
 from src.State import State
+from src.bfs_lists import BfsCollection
 
 
 class Search:
-    def __init__(self):
-        self.lists: DumbAssLists = None
+    def __init__(self, mode: str):
+        if mode == "fast":
+            self.lists = BfsCollection()
+        elif mode == "slow":
+            self.lists = DumbAssLists()
         self.iterations_count: int = 0
 
     def findSolution(self, root: State, seed=None):
         # Initialization
-        self.lists = DumbAssLists()
+
         self.iterations_count: int = 0
 
-        self.lists.push_open(root)
+        self.lists.push(root)
 
         # Search algorithm
-        while len(self.lists.OPEN) > 0:
+        while self.lists.get_open_size() > 0:
             self.iterations_count = self.iterations_count + 1
             node = self.lists.poll()
 
@@ -25,7 +28,7 @@ class Search:
 
             node.expand()
             for child in node.children:
-                self.lists.push_open(child)
+                self.lists.push(child)
 
         print("Solution was not found.")
         return []

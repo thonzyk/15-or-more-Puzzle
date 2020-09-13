@@ -1,6 +1,8 @@
 import numpy as np
 from src.Board import Board
 
+MIN_LONG_VALUE = -(pow(2, 64) / 2) - 1
+
 
 # TODO: optimize (change state representation to vector)
 
@@ -12,9 +14,11 @@ class State:
         self.parent = None
         self.children = []
         self.is_alive = True
+        self.is_closed = False
 
     def __str__(self):
         return self.board.to_string() + " cost: " + str(self.cost) + " heuristic: " + str(self.heuristic)
+
 
     def to_string(self):
         return self.board.to_string() + " cost: " + str(self.cost) + " heuristic: " + str(self.heuristic)
@@ -90,3 +94,14 @@ class State:
 
         self.heuristic = heuristic / 2
         # self.heuristic = 0
+
+    def get_hash(self) -> np.int64:
+        index = 0
+        hash_value = np.int64(MIN_LONG_VALUE)
+        for y in range(self.board.board_map.shape[1] - 1, -1, -1):
+            for x in range(self.board.board_map.shape[0]):
+                tile = self.board.board_map[x, y]
+                hash_value = hash_value + (tile * pow(16, index))
+                index = index + 1
+
+        return hash_value
