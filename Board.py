@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Board:
     def __init__(self, board_map, x, y):
         """
@@ -38,7 +39,7 @@ class Board:
 
         result = result + "\n"
 
-        for y in range(self.board_map.shape[1]-1, -1, -1):
+        for y in range(self.board_map.shape[1] - 1, -1, -1):
             result = result + "#"
             for x in range(self.board_map.shape[0]):
                 if self.board_map[x, y] != 0:
@@ -66,3 +67,35 @@ class Board:
     def clone(self):
         clone = Board(self.board_map.copy(), self.x, self.y)
         return clone
+
+    def is_solvable(self):
+        if self.board_map.shape[0] != self.board_map.shape[1]:
+            print("Not implemented for N*M yet.")
+            return True
+
+        inversions_count = 0
+        board_array = self.board_to_array()
+        for i in range(len(board_array)):
+            for j in range(i, len(board_array)):
+                if board_array[i] > board_array[j] and board_array[j] != 0 and board_array[i] != 0:
+                    inversions_count = inversions_count + 1
+
+        if self.board_map.shape[0] % 2 == 0:  # EVEN N*N
+            self.find_empty_tile()
+            row_number = self.y + 1
+            if row_number % 2 == 1:  # ODD
+                return inversions_count % 2 == 0
+            else:  # EVEN
+                return inversions_count % 2 == 1
+        else:  # ODD N*N
+            return inversions_count % 2 == 0
+
+
+    def board_to_array(self):
+        board_array = []
+        for y in range(self.board_map.shape[1] - 1, -1, -1):
+            for x in range(self.board_map.shape[0]):
+                board_array.append(self.board_map[x, y])
+
+        return board_array
+

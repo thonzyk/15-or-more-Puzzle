@@ -22,6 +22,7 @@ class Search:
                 lists.push_open(child)
 
         print("Solution was not found.")
+        return []
 
     def get_solve_sequence(self, finish_node: State):
         solution = []

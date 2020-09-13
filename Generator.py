@@ -13,6 +13,8 @@ def random_board(board_shape, seed=None):
 
 def random_root(board_shape):
     board = random_board(board_shape)
+    while not board.is_solvable():
+        board = random_board(board_shape)
     root = State(board)
     return root
 

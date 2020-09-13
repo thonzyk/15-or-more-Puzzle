@@ -1,7 +1,8 @@
 import numpy as np
+from src.Board import Board
 
 class State:
-    def __init__(self, board=None):
+    def __init__(self, board: Board = None):
         self.cost = 0
         self.heuristic = 0
         self.board = board
@@ -54,9 +55,10 @@ class State:
         last = -1
         for y in range(self.board.board_map.shape[1] - 1, -1, -1):
             for x in range(self.board.board_map.shape[0]):
-                if self.board.board_map[x, y] < last:
+                this = self.board.board_map[x, y] if self.board.board_map[x, y] != 0 else 125
+                if this < last:
                     return False
-                last = self.board.board_map[x, y]
+                last = this
 
         return True
 
