@@ -1,5 +1,5 @@
 import numpy as np
-
+from math import ceil
 
 class Board:
     def __init__(self, board_map, x, y):
@@ -9,8 +9,8 @@ class Board:
         :param y: y-coordinate of empty tile (0)
         """
         self.board_map = board_map
-        self.x = np.int8(x)
-        self.y = np.int8(y)
+        self.x: np.int8 = np.int8(x)
+        self.y: np.int8 = np.int8(y)
 
     def move_up(self):
         self.y = self.y + 1
@@ -99,3 +99,26 @@ class Board:
 
         return board_array
 
+    def get_manhattan_distance(self, x, y, tile_number):
+        """
+        Returns Manhattan distance of the tile with coordinates [x, y] from its right location
+        :param tile_number:
+        :param x:
+        :param y:
+        :return:
+        """
+        right_x, right_y = self.get_coordinates_of_number(tile_number)
+        return abs(x - right_x) + abs(y - right_y)
+
+    def get_coordinates_of_number(self, number):
+        if number == 0:
+            x = self.board_map.shape[0] - 1
+            y = 0
+        else:
+            x = ((number - 1) % self.board_map.shape[0])
+            y = self.board_map.shape[1] - 1 - np.int8(((number - 1) / self.board_map.shape[0]))
+
+        return x, y
+
+    def get_tile(self, x, y) -> np.int8:
+        return self.board_map[x, y]

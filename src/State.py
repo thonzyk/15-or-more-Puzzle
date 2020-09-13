@@ -1,10 +1,13 @@
 import numpy as np
 from src.Board import Board
 
+
+# TODO: optimize (change state representation to vector)
+
 class State:
     def __init__(self, board: Board = None):
-        self.cost = 0
-        self.heuristic = 0
+        self.cost: int = 0
+        self.heuristic: int = 0
         self.board = board
         self.parent = None
         self.children = []
@@ -21,24 +24,28 @@ class State:
         if self.board.y < self.board.board_map.shape[1] - 1:
             child = self.create_child()
             child.board.move_up()
+            child.set_heuristic()
             self.children.append(child)
 
         # MOVE RIGHT
         if self.board.x < self.board.board_map.shape[0] - 1:
             child = self.create_child()
             child.board.move_right()
+            child.set_heuristic()
             self.children.append(child)
 
         # MOVE DOWN
         if self.board.y > 0:
             child = self.create_child()
             child.board.move_down()
+            child.set_heuristic()
             self.children.append(child)
 
         # MOVE LEFT
         if self.board.x > 0:
             child = self.create_child()
             child.board.move_left()
+            child.set_heuristic()
             self.children.append(child)
 
     def create_child(self) -> 'State':
@@ -73,3 +80,13 @@ class State:
 
     def get_complete_cost(self):
         return self.cost + self.heuristic
+
+    def set_heuristic(self):
+        heuristic = 0
+        for y in range(self.board.board_map.shape[1] - 1, -1, -1):
+            for x in range(self.board.board_map.shape[0]):
+                tile_number = self.board.get_tile(x, y)
+                heuristic = heuristic + self.board.get_manhattan_distance(x, y, tile_number)
+
+        self.heuristic = heuristic / 2
+        # self.heuristic = 0

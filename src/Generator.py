@@ -18,9 +18,17 @@ def random_root(board_shape):
     root = State(board)
     return root
 
-def explicit_root():
+def explicit_root_1():
     board_map = np.array([1, 0, 3, 2])
     board_map = board_map.reshape((2, 2))
+    board = Board(board_map, 0, 0)
+    board.find_empty_tile()
+    root = State(board)
+    return root
+
+def explicit_root_2():
+    board_map = np.array([3, 1, 5, 4, 0, 2])
+    board_map = board_map.reshape((2, 3))
     board = Board(board_map, 0, 0)
     board.find_empty_tile()
     root = State(board)

@@ -4,22 +4,28 @@ from src.State import State
 
 
 class Search:
+    def __init__(self):
+        self.lists: DumbAssLists = None
+        self.iterations_count: int = 0
 
     def findSolution(self, root: State, seed=None):
         # Initialization
-        lists = DumbAssLists()
-        lists.push_open(root)
+        self.lists = DumbAssLists()
+        self.iterations_count: int = 0
+
+        self.lists.push_open(root)
 
         # Search algorithm
-        while len(lists.OPEN) > 0:
-            node = lists.poll()
+        while len(self.lists.OPEN) > 0:
+            self.iterations_count = self.iterations_count + 1
+            node = self.lists.poll()
 
             if node.is_finished():
                 return self.get_solve_sequence(node)
 
             node.expand()
             for child in node.children:
-                lists.push_open(child)
+                self.lists.push_open(child)
 
         print("Solution was not found.")
         return []

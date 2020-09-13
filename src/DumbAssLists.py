@@ -23,7 +23,7 @@ class DumbAssLists:
         favorite: State = None
 
         for state in self.OPEN:
-            if favorite is None or state.cost < favorite.cost:
+            if favorite is None or state.get_complete_cost() < favorite.get_complete_cost():
                 favorite = state
 
         self.OPEN = [list_state for list_state in self.OPEN if not favorite.equals(list_state, True)]
