@@ -1,5 +1,5 @@
 import numpy as np
-from src.Board import Board
+from Board import Board
 
 MIN_LONG_VALUE = -(pow(2, 64) / 2) - 1
 
@@ -18,7 +18,6 @@ class State:
 
     def __str__(self):
         return self.board.to_string() + " cost: " + str(self.cost) + " heuristic: " + str(self.heuristic)
-
 
     def to_string(self):
         return self.board.to_string() + " cost: " + str(self.cost) + " heuristic: " + str(self.heuristic)
@@ -90,9 +89,11 @@ class State:
         for y in range(self.board.board_map.shape[1] - 1, -1, -1):
             for x in range(self.board.board_map.shape[0]):
                 tile_number = self.board.get_tile(x, y)
+                if tile_number == 0:
+                    continue
                 heuristic = heuristic + self.board.get_manhattan_distance(x, y, tile_number)
 
-        self.heuristic = heuristic / 2
+        self.heuristic = heuristic
         # self.heuristic = 0
 
     def get_hash(self) -> np.int64:
@@ -105,3 +106,15 @@ class State:
                 index = index + 1
 
         return hash_value
+
+    def get_transition(self, next_state: 'State') -> str:
+        if self.board.y < next_state.board.y:
+            return "UP"
+        if self.board.x < next_state.board.x:
+            return "RIGHT"
+        if self.board.y > next_state.board.y:
+            return "DOWN"
+        if self.board.x > next_state.board.x:
+            return "LEFT"
+
+        return "NONE"

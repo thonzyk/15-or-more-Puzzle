@@ -1,6 +1,6 @@
 import numpy as np
-from src.Board import Board
-from src.State import State
+from Board import Board
+from State import State
 
 def random_board(board_shape, seed=None):
     number_of_tiles = board_shape[0] * board_shape[1]

@@ -1,6 +1,7 @@
-from src.DumbAssLists import DumbAssLists
-from src.State import State
-from src.bfs_lists import BfsCollection
+from DumbAssLists import DumbAssLists
+from State import State
+from bfs_lists import BfsCollection
+from solution import Solution
 
 
 class Search:
@@ -11,11 +12,11 @@ class Search:
             self.lists = DumbAssLists()
         self.iterations_count: int = 0
 
-    def findSolution(self, root: State, seed=None):
+    def findSolution(self, root: State, seed=None) -> Solution:
         # Initialization
 
         self.iterations_count: int = 0
-
+        root.set_heuristic()
         self.lists.push(root)
 
         # Search algorithm
@@ -24,7 +25,7 @@ class Search:
             node = self.lists.poll()
 
             if node.is_finished():
-                return self.get_solve_sequence(node)
+                return self.get_solution(node)
 
             node.expand()
             for child in node.children:
@@ -33,7 +34,24 @@ class Search:
         print("Solution was not found.")
         return []
 
-    def get_solve_sequence(self, finish_node: State):
+    def get_solution(self, finish_node: State) -> Solution:
+        solution = Solution()
+        solution.state_sequence = self.get_state_sequence(finish_node)
+        solution.action_sequence = self.get_action_sequence(solution.state_sequence)
+        solution
+        return solution
+
+    def get_action_sequence(self, state_sequence):
+        action_sequence = []
+        last_state = state_sequence[0]
+        for state in state_sequence:
+            if last_state is not None:
+                action_sequence.append(last_state.get_transition(state))
+            last_state = state
+
+        return action_sequence
+
+    def get_state_sequence(self, finish_node: State):
         solution = []
 
         node = finish_node

@@ -1,4 +1,4 @@
-from src.State import State
+from State import State
 from heapq import heappush, heappop
 import numpy as np
 
@@ -56,7 +56,7 @@ class BfsCollection:
         self.STATE_LIST.append(state)
         index = len(self.STATE_LIST) - 1
         self.INDEX_DICT[state.get_hash()] = index
-        cost_index_map = CostIndexMap(state.cost, index)
+        cost_index_map = CostIndexMap(state.get_complete_cost(), index)
         heappush(self.COST_HEAP, cost_index_map)
         self.OPEN_size = self.OPEN_size + 1
 
@@ -98,6 +98,9 @@ class BfsCollection:
         while not state.is_alive:  # TODO: optimize
             index = heappop(self.COST_HEAP).index
             state = self.STATE_LIST[index]
+
+
+
 
         return state
 

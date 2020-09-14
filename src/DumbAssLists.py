@@ -1,4 +1,4 @@
-from src.State import State
+from State import State
 
 
 class DumbAssLists:
