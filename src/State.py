@@ -1,8 +1,8 @@
 import numpy as np
 from Board import Board
 
-MIN_LONG_VALUE = -(pow(2, 64) / 2) - 1
-
+MIN_LONG_VALUE = -np.int64((2 ** 63) - 1)
+MAX_LONG_VALUE = np.int64((2 ** 63) - 1)
 
 # TODO: optimize (change state representation to vector)
 
@@ -98,11 +98,13 @@ class State:
 
     def get_hash(self) -> np.int64:
         index = 0
-        hash_value = np.int64(MIN_LONG_VALUE)
+        hash_value = MIN_LONG_VALUE
         for y in range(self.board.board_map.shape[1] - 1, -1, -1):
             for x in range(self.board.board_map.shape[0]):
-                tile = self.board.board_map[x, y]
-                hash_value = hash_value + (tile * pow(16, index))
+                if index >= self.board.board_map.size - 1:
+                    continue
+                tile = np.int64(self.board.board_map[x, y])
+                hash_value = hash_value + (tile * np.int64(16**index))
                 index = index + 1
 
         return hash_value

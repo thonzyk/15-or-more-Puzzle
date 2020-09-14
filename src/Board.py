@@ -13,22 +13,22 @@ class Board:
         self.y: np.int8 = np.int8(y)
 
     def move_up(self):
-        self.y = self.y + 1
+        self.y = np.int8(self.y + 1)
         self.board_map[self.x, self.y - 1] = self.board_map[self.x, self.y]
         self.board_map[self.x, self.y] = 0
 
     def move_right(self):
-        self.x = self.x + 1
+        self.x = np.int8(self.x + 1)
         self.board_map[self.x - 1, self.y] = self.board_map[self.x, self.y]
         self.board_map[self.x, self.y] = 0
 
     def move_down(self):
-        self.y = self.y - 1
+        self.y = np.int8(self.y - 1)
         self.board_map[self.x, self.y + 1] = self.board_map[self.x, self.y]
         self.board_map[self.x, self.y] = 0
 
     def move_left(self):
-        self.x = self.x - 1
+        self.x = np.int8(self.x - 1)
         self.board_map[self.x + 1, self.y] = self.board_map[self.x, self.y]
         self.board_map[self.x, self.y] = 0
 

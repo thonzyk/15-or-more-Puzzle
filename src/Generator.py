@@ -7,6 +7,7 @@ def random_board(board_shape, seed=None):
     board_map = np.array(range(number_of_tiles))
     np.random.shuffle(board_map)
     board_map = board_map.reshape(board_shape)
+    board_map = board_map.astype(np.int8)
     board = Board(board_map, 0, 0)
     board.find_empty_tile()
     return board
