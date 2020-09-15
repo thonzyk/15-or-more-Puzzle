@@ -99,7 +99,7 @@ class Board:
 
         return board_array
 
-    def get_manhattan_distance(self, x, y, tile_number):
+    def get_manhattan_distance(self, x, y, tile_number) -> np.int8:
         """
         Returns Manhattan distance of the tile with coordinates [x, y] from its right location
         :param tile_number:
@@ -110,13 +110,13 @@ class Board:
         right_x, right_y = self.get_coordinates_of_number(tile_number)
         return abs(x - right_x) + abs(y - right_y)
 
-    def get_coordinates_of_number(self, number):
+    def get_coordinates_of_number(self, number) -> (np.int8, np.int8):
         if number == 0:
-            x = self.board_map.shape[0] - 1
-            y = 0
+            x = np.int8(self.board_map.shape[0] - 1)
+            y = np.int8(0)
         else:
-            x = ((number - 1) % self.board_map.shape[0])
-            y = self.board_map.shape[1] - 1 - np.int8(((number - 1) / self.board_map.shape[0]))
+            x = np.int8(((number - 1) % self.board_map.shape[0]))
+            y = np.int8(self.board_map.shape[1] - 1 - np.int8(((number - 1) / self.board_map.shape[0])))
 
         return x, y
 

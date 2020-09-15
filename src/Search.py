@@ -22,6 +22,11 @@ class Search:
         # Search algorithm
         while self.lists.get_open_size() > 0:
             self.iterations_count = self.iterations_count + 1
+
+            if self.iterations_count > 7000000:
+                print("Solution cannot be found, not enough memory")
+                return []
+
             node = self.lists.poll()
 
             if node.is_finished():

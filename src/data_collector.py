@@ -10,3 +10,5 @@ if __name__ == '__main__':
     data = str(solution)
     with open(CSV_PATH, 'a') as fd:
         fd.write(data)
+
+    print(search.iterations_count)

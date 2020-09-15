@@ -8,13 +8,13 @@ MAX_LONG_VALUE = np.int64((2 ** 63) - 1)
 
 class State:
     def __init__(self, board: Board = None):
-        self.cost: int = 0
-        self.heuristic: int = 0
+        self.cost: np.int8 = np.int8(0)
+        self.heuristic: np.int8 = np.int8(0)
         self.board = board
         self.parent = None
         self.children = []
-        self.is_alive = True
-        self.is_closed = False
+        # self.is_alive = True
+        # self.is_closed = False
 
     def __str__(self):
         return self.board.to_string() + " cost: " + str(self.cost) + " heuristic: " + str(self.heuristic)
@@ -54,10 +54,10 @@ class State:
     def create_child(self) -> 'State':
         child = State()
         child.board = self.board.clone()
-        child.cost = self.cost + 1  # TODO: maybe move "+1" somewhere else
+        child.cost = self.cost + np.int8(1)  # TODO: maybe move "+1" somewhere else
         child.parent = self
         child.children = []
-        child.is_alive = True
+        # child.is_alive = True
         return child
 
     def is_finished(self) -> bool:
@@ -81,17 +81,17 @@ class State:
         else:
             return True
 
-    def get_complete_cost(self):
+    def get_complete_cost(self) -> np.int8:
         return self.cost + self.heuristic
 
     def set_heuristic(self):
-        heuristic = 0
+        heuristic = np.int8(0)
         for y in range(self.board.board_map.shape[1] - 1, -1, -1):
             for x in range(self.board.board_map.shape[0]):
-                tile_number = self.board.get_tile(x, y)
+                tile_number = np.int8(self.board.get_tile(x, y))
                 if tile_number == 0:
                     continue
-                heuristic = heuristic + self.board.get_manhattan_distance(x, y, tile_number)
+                heuristic = heuristic + self.board.get_manhattan_distance(np.int8(x), np.int8(y), tile_number)
 
         self.heuristic = heuristic
         # self.heuristic = 0

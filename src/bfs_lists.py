@@ -29,7 +29,7 @@ class BfsCollection:
         :return:
         """
         best_state = self.find_best_state()
-        best_state.is_closed = True
+        # best_state.is_closed = True
         self.OPEN_size = self.OPEN_size - 1
         return best_state
 
@@ -85,8 +85,12 @@ class BfsCollection:
         for child in root.children:
             self.remove_subtree(child)
 
+    # def remove(self, state: State):
+    #     state.is_alive = False
+
     def remove(self, state: State):
-        state.is_alive = False
+        index = self.INDEX_DICT[state.get_hash()]
+        self.STATE_LIST[index] = None
 
     def clear_lists(self):
         self.OPEN = [state for state in self.OPEN if state.is_alive]
@@ -95,20 +99,18 @@ class BfsCollection:
     def find_best_state(self) -> State:
         index = heappop(self.COST_HEAP).index
         state: State = self.STATE_LIST[index]
-        while not state.is_alive:  # TODO: optimize
+        while state is None:
             index = heappop(self.COST_HEAP).index
             state = self.STATE_LIST[index]
-
-
-
 
         return state
 
     def get_open_size(self):
         return self.OPEN_size
 
+
 class CostIndexMap:
-    def __init__(self, cost=-1, index=-1):
+    def __init__(self, cost: np.int8 = -1, index = -1):
         self.cost = cost
         self.index = index
 

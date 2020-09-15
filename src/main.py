@@ -10,7 +10,7 @@ if __name__ == '__main__':
     with open("config.properties", "rb") as f:
         p.load(f, "utf-8")
 
-    # root = explicit_root_3()
+    # root = explicit_root_2()
     root = random_root((3, 3))
     search = Search("fast")
 
@@ -23,5 +23,5 @@ if __name__ == '__main__':
 
     print("Compute time: " + str(end - start) + " seconds")
     print("iterations: " + str(search.iterations_count))
-    print(solution)
+    # print(solution)
     pass
