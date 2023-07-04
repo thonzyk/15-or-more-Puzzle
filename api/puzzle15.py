@@ -1,4 +1,17 @@
 import numpy as np
+import time
+from tqdm import tqdm
+
+
+def format_time_diff(time_diff):
+    # Convert the time difference to hours, minutes, seconds and milliseconds
+    hours, rem = divmod(time_diff, 3600)
+    minutes, seconds = divmod(rem, 60)
+    seconds, milliseconds = divmod(seconds, 1)
+    milliseconds = round(milliseconds * 1000)
+
+    # Return time difference in "HH:MM:SS:MS" format
+    return "{:0>2}:{:0>2}:{:0>2}:{:0>3}".format(int(hours), int(minutes), int(seconds), int(milliseconds))
 
 
 class Puzzle15:
@@ -9,22 +22,34 @@ class Puzzle15:
 
         # Generate random board
         self.board = np.arange(height * width).astype('int8')
-
-        # Shuffle the board
-        self.board = self.board[np.random.permutation(len(self.board))]
-
         # Reshape to 2D
         self.board = self.board.reshape((height, width))
 
-        # Initialize # moves
-        self.moves = 0
+        # Define win state
+        self.win_board = np.copy(self.board)
+
+        # Define action operations
+        self.action_map = {
+            0: np.array((-1, 0), dtype='int8'),  # up (↑)
+            1: np.array((0, 1), dtype='int8'),  # right (→)
+            2: np.array((1, 0), dtype='int8'),  # down (↓)
+            3: np.array((0, -1), dtype='int8')  # left (←)
+        }
 
         # Initialize supportive variables
-        self.zero_coord = (0, 0)
+        self.zero_coord = np.array((0, 0), dtype='int8')
         for i in range(self.board.shape[0]):
             for j in range(self.board.shape[1]):
                 if self.board[i, j] == 0:
                     self.zero_coord = (i, j)
+
+        # Shuffle the board
+        self.shuffle_the_board()
+
+        # Initialize start time
+        self.start_time = time.time()
+        # Initialize # moves
+        self.n_moves = 0
 
     def get_state(self):
         return np.copy(self.board)
@@ -48,10 +73,48 @@ class Puzzle15:
         """
         possible_actions = self.get_possible_actions()
         if not possible_actions[move_number]:
-            assert False, 'Invalid Move - Game Over'
+            exit('Game Over - Invalid Move!')
 
-        # TODO: implement the change of the state
+        # Perform change of the state
+        move_num_coord = tuple(self.zero_coord + self.action_map[move_number])
+        move_num = self.board[move_num_coord]
+        self.board[tuple(self.zero_coord)] = move_num
+        self.board[move_num_coord] = 0
+        self.zero_coord += self.action_map[move_number]
+
+        if not self.shuffling:
+            self.check_win()
+
+    def check_win(self):
+        self.n_moves += 1
+
+        if np.all(self.board == self.win_board):
+            finish_time = time.time()
+            elapsed_time = format_time_diff(finish_time - self.start_time)
+            exit(f'\nGame Completed!\nNumber of moves: {self.n_moves}\nTime: {elapsed_time}')
+
+    def shuffle_the_board(self):
+        self.shuffling = True
+        all_moves = np.arange(4)
+        for i in range(10_000):
+            possible_moves = all_moves[self.get_possible_actions()]
+            random_move = np.random.choice(possible_moves)
+            self.move(random_move)
+        self.shuffling = False
 
 
 if __name__ == '__main__':
-    b = Puzzle15()
+    # Demo script: random solver
+    b = Puzzle15(3, 3)
+
+    all_moves = np.arange(4)
+
+    pbar = tqdm()
+
+    print('Trying to solve the puzzle by random moves...')
+    while True:
+        possible_moves = all_moves[b.get_possible_actions()]
+        random_move = np.random.choice(possible_moves)
+        b.move(random_move)
+        # tqdm.write("Processing...")
+        pbar.update(1)
