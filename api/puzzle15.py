@@ -4,14 +4,26 @@ from tqdm import tqdm
 
 
 def format_time_diff(time_diff):
-    # Convert the time difference to hours, minutes, seconds and milliseconds
     hours, rem = divmod(time_diff, 3600)
     minutes, seconds = divmod(rem, 60)
     seconds, milliseconds = divmod(seconds, 1)
     milliseconds = round(milliseconds * 1000)
 
-    # Return time difference in "HH:MM:SS:MS" format
-    return "{:0>2}:{:0>2}:{:0>2}:{:0>3}".format(int(hours), int(minutes), int(seconds), int(milliseconds))
+    result = ""
+    # Add hours if non-zero
+    if hours > 0:
+        result += "{} h ".format(int(hours))
+    # Add minutes if non-zero
+    if minutes > 0:
+        result += "{} m ".format(int(minutes))
+    # Add seconds if non-zero
+    if seconds > 0:
+        result += "{} s ".format(int(seconds))
+    # Add milliseconds if non-zero
+    if milliseconds > 0:
+        result += "{} ms".format(int(milliseconds))
+
+    return result.strip()  # Remove trailing whitespace
 
 
 class Puzzle15:
@@ -116,5 +128,4 @@ if __name__ == '__main__':
         possible_moves = all_moves[b.get_possible_actions()]
         random_move = np.random.choice(possible_moves)
         b.move(random_move)
-        # tqdm.write("Processing...")
         pbar.update(1)
