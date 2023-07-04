@@ -117,13 +117,13 @@ class Puzzle15:
 
 if __name__ == '__main__':
     # Demo script: random solver
+    print('Trying to solve the puzzle by random moves...')
     b = Puzzle15(3, 3)
 
     all_moves = np.arange(4)
 
     pbar = tqdm()
 
-    print('Trying to solve the puzzle by random moves...')
     while True:
         possible_moves = all_moves[b.get_possible_actions()]
         random_move = np.random.choice(possible_moves)
